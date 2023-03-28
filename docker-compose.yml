@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  database:
+    image: postgres
+    container_name: postgres-projeto-aplicado
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - 5432:5432
+    volumes: 
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
+    driver: local

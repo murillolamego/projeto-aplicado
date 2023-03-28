@@ -1,3 +1,5 @@
+import { PrismaService } from "prisma.service";
+
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import {
@@ -49,6 +51,9 @@ async function bootstrap(): Promise<void> {
     new FastifyAdapter(),
   );
 
+  const prismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
+
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
 
@@ -63,7 +68,7 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document, expressSwaggerCustomOptions);
 
-  await app.listen(3000);
+  await app.listen(3333);
 
   if (module.hot) {
     module.hot.accept();
