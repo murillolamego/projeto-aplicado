@@ -1,4 +1,4 @@
-import { IsEmail, IsLowercase, IsString } from "class-validator";
+import { IsEmail, IsLowercase, IsString, Length } from "class-validator";
 
 export class CreateUserDto {
   /**
@@ -6,11 +6,13 @@ export class CreateUserDto {
    */
   @IsEmail()
   @IsLowercase()
+  @Length(0, 254)
   email: string;
 
   /**
    * @example "John Doe"
    */
   @IsString()
+  @Length(3, 40)
   name: string;
 }

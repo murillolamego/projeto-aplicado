@@ -18,9 +18,11 @@ export class CategoriesService {
     });
 
     if (categoryExists) {
-      console.log(`The category "${createCategoryDto.name}" already exists.`);
+      console.log(
+        `The category, \'${createCategoryDto.name}\', already exists with the id: ${categoryExists.id}`,
+      );
       throw new HttpException(
-        `The category "${createCategoryDto.name}" already exists.`,
+        `The category, \'${createCategoryDto.name}\', already exists with the id: ${categoryExists.id}`,
         HttpStatus.BAD_REQUEST,
       );
     }

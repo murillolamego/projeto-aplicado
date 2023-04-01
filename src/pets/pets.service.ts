@@ -19,10 +19,10 @@ export class PetsService {
 
     if (petExists) {
       console.log(
-        `The username "${createPetDto.username}" is already associated with an account.`,
+        `The username \'${createPetDto.username}\' is already associated with an account.`,
       );
       throw new HttpException(
-        `The username "${createPetDto.username}" is already associated with an account.`,
+        `The username \'${createPetDto.username}\' is already associated with an account.`,
         HttpStatus.BAD_REQUEST,
       );
     }

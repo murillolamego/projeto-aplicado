@@ -1,40 +1,49 @@
-import { IsInt, IsLowercase, IsString } from "class-validator";
+import {
+  IsAlphanumeric,
+  IsLowercase,
+  IsPositive,
+  IsString,
+  IsUUID,
+  Length,
+} from "class-validator";
 
 export class CreatePetDto {
   /**
    * @example "petrock"
    */
-  @IsString()
+  @IsAlphanumeric()
   @IsLowercase()
+  @Length(3, 20)
   username: string;
 
   /**
    * @example "Pet Rock"
    */
   @IsString()
+  @Length(3, 40)
   name: string;
 
   /**
    * @example "5"
    */
-  @IsInt()
+  @IsPositive()
   age: number;
 
   /**
    * @example "UUID"
    */
-  @IsString()
+  @IsUUID()
   categoryId: string;
 
   /**
    * @example "UUID"
    */
-  @IsString()
+  @IsUUID()
   breedId: string;
 
   /**
    * @example "UUID"
    */
-  @IsString()
+  @IsUUID()
   guardianId: string;
 }

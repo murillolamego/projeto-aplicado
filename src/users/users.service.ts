@@ -18,9 +18,11 @@ export class UsersService {
     });
 
     if (userExists) {
-      console.log("This email is already associated with an account.");
+      console.log(
+        `The email, '${createUserDto.email}' is already associated with an account.`,
+      );
       throw new HttpException(
-        "This email is already associated with an account.",
+        `The email, '${createUserDto.email}' is already associated with an account.`,
         HttpStatus.BAD_REQUEST,
       );
     }
