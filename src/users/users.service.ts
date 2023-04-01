@@ -1,7 +1,7 @@
 import { PrismaService } from "prisma.service";
 
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -11,6 +11,20 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const userExists = await this.prisma.user.findFirst({
+      where: {
+        email: createUserDto.email,
+      },
+    });
+
+    if (userExists) {
+      console.log("This email is already associated with an account.");
+      throw new HttpException(
+        "This email is already associated with an account.",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     try {
       const user = await this.prisma.user.create({
         data: createUserDto,
@@ -27,8 +41,13 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
+    const maxReturnUsers = 1000;
+
     try {
-      const users = await this.prisma.user.findMany();
+      const users = await this.prisma.user.findMany({
+        orderBy: { email: "asc" },
+        take: maxReturnUsers,
+      });
 
       return users;
     } catch (e) {
