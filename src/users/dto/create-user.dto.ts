@@ -1,10 +1,11 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsLowercase, IsString } from "class-validator";
 
 export class CreateUserDto {
   /**
    * @example "johndoe@gmail.com"
    */
   @IsEmail()
+  @IsLowercase()
   email: string;
 
   /**

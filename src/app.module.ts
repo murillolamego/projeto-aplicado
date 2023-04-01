@@ -5,6 +5,7 @@ import { ConfigModule } from "@nestjs/config";
 
 import { PetsModule } from "./pets/pets.module";
 import { UsersModule } from "./users/users.module";
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UsersModule } from "./users/users.module";
     }),
     UsersModule,
     PetsModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [PrismaService],

@@ -1,10 +1,11 @@
-import { IsInt, IsString } from "class-validator";
+import { IsInt, IsLowercase, IsString } from "class-validator";
 
 export class CreatePetDto {
   /**
    * @example "petrock"
    */
   @IsString()
+  @IsLowercase()
   username: string;
 
   /**

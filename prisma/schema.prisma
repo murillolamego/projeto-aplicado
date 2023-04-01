@@ -17,18 +17,18 @@ model User {
 }
 
 model Pet {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  name      String
-  age       Int
-  Category  Category @relation(fields: [categoryId], references: [id])
-  categoryId    String
-  Breed     Breed    @relation(fields: [breedId], references: [id])
-  breedId   String
-  Guardian      User     @relation(fields: [guardianId], references: [id])
-  guardianId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  username   String   @unique
+  name       String
+  age        Int
+  Category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  Breed      Breed    @relation(fields: [breedId], references: [id])
+  breedId    String
+  Guardian   User     @relation(fields: [guardianId], references: [id])
+  guardianId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Category {
@@ -42,12 +42,12 @@ model Category {
 }
 
 model Breed {
-  id        String   @id @default(uuid())
-  name      String
-  about     String
-  Category  Category @relation(fields: [categoryId], references: [id])
-  categoryId    String
-  pets      Pet[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  name       String
+  about      String
+  Category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  pets       Pet[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
