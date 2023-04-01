@@ -44,6 +44,14 @@ export class PetsController {
   }
 
   /**
+   * Fetches a pet with a given username on the platform.
+   */
+  @Get("/username/:username")
+  findOneByUsername(@Param("username") username: string): Promise<Pet> {
+    return this.petsService.findOneByUsername(username);
+  }
+
+  /**
    * Updates a pet with a given id on the platform.
    */
   @Patch(":id")

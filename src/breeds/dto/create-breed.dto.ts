@@ -2,7 +2,7 @@ import { IsLowercase, IsString, IsUUID, Length } from "class-validator";
 
 export class CreateBreedDto {
   /**
-   * @example "french-bulldog"
+   * @example "french bulldog"
    */
   @IsString()
   @IsLowercase()

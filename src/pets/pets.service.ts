@@ -45,8 +45,12 @@ export class PetsService {
     }
 
     const breedExists = categoryExists.breeds.find((breed) => {
-      breed.id === createPetDto.breedId;
+      return breed.id === createPetDto.breedId;
     });
+
+    console.log("BREEDS", categoryExists.breeds);
+
+    console.log("BREED EXISTS", breedExists);
 
     if (!breedExists) {
       console.log(`This breed of ${categoryExists.name} is not available.`);
@@ -109,6 +113,24 @@ export class PetsService {
       const pet = await this.prisma.pet.findFirst({
         where: {
           id,
+        },
+      });
+
+      return pet;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching pet.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findOneByUsername(username: string): Promise<Pet> {
+    try {
+      const pet = await this.prisma.pet.findFirst({
+        where: {
+          username,
         },
       });
 

@@ -1,3 +1,4 @@
+import * as bcrypt from "bcrypt";
 import { PrismaService } from "prisma.service";
 
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
@@ -27,10 +28,27 @@ export class UsersService {
       );
     }
 
+    const saltRounds = 10;
+
+    try {
+      createUserDto.password = await bcrypt.hash(
+        createUserDto.password,
+        saltRounds,
+      );
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error while creating user.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
     try {
       const user = await this.prisma.user.create({
         data: createUserDto,
       });
+
+      delete user.password;
 
       return user;
     } catch (e) {
@@ -99,6 +117,19 @@ export class UsersService {
   }
 
   async remove(id: string): Promise<User> {
+    const userExists = await this.prisma.user.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!userExists) {
+      throw new HttpException(
+        "User not found",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
     try {
       const user = await this.prisma.user.delete({
         where: {

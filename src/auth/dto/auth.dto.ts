@@ -1,12 +1,11 @@
 import {
   IsEmail,
   IsLowercase,
-  IsString,
   IsStrongPassword,
   Length,
 } from "class-validator";
 
-export class CreateUserDto {
+export class AuthDto {
   /**
    * @example "johndoe@gmail.com"
    */
@@ -14,13 +13,6 @@ export class CreateUserDto {
   @IsLowercase()
   @Length(0, 254)
   email: string;
-
-  /**
-   * @example "John Doe"
-   */
-  @IsString()
-  @Length(3, 40)
-  name: string;
 
   /**
    * @example "Strong password"
