@@ -1,5 +1,3 @@
-import { AccessTokenGuard } from "src/auth/accessToken.guard";
-
 import {
   Controller,
   Get,
@@ -8,9 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { User } from "@prisma/client";
 
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -33,8 +30,6 @@ export class UsersController {
   /**
    * Fetches all users on the platform.
    */
-  @UseGuards(AccessTokenGuard)
-  @ApiBearerAuth()
   @Get()
   findAll(): Promise<User[]> {
     return this.usersService.findAll();

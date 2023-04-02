@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
-import { AccessTokenGuard } from "./accessToken.guard";
 import { AuthService, IAuthPayload } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
-import { RefreshTokenGuard } from "./refreshToken.guard";
+import { AccessTokenGuard } from "./guards/accessToken.guard";
+import { RefreshTokenGuard } from "./guards/refreshToken.guard";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -14,20 +14,23 @@ export class AuthController {
   /**
    * Sign in into the platform.
    */
-  @Post("login")
+  @Post("signin")
   signIn(@Body() authDto: AuthDto): Promise<IAuthPayload> {
     return this.authService.signIn(authDto);
   }
 
+  /**
+   * Sign out from the platform.
+   */
   @UseGuards(AccessTokenGuard)
   @ApiBearerAuth()
-  @Get("logout")
-  logout(@Req() req: { user: Record<string, string> }): void {
-    this.authService.logout(req.user["sub"]);
+  @Get("signout")
+  signOut(@Req() req: { user: Record<string, string> }): void {
+    this.authService.signOut(req.user["sub"]);
   }
 
   /**
-   * Refreshes user token to access the platform.
+   * Refresh user tokens to mantain access to the platform.
    */
   @UseGuards(RefreshTokenGuard)
   @ApiBearerAuth()

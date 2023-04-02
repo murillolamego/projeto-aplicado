@@ -1,6 +1,7 @@
 import { PrismaService } from "prisma.service";
 
 import { ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import {
   FastifyAdapter,
@@ -59,6 +60,8 @@ async function bootstrap(): Promise<void> {
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
 
+  const configService = app.get(ConfigService);
+
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
 
@@ -73,7 +76,11 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document, expressSwaggerCustomOptions);
 
-  await app.listen(3333);
+  const PORT = parseInt(configService.get<string>("PORT")) || 3333;
+
+  await app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 
   if (module.hot) {
     module.hot.accept();

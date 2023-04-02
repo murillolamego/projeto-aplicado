@@ -108,6 +108,50 @@ export class PetsService {
     }
   }
 
+  async findByCategory(categoryId: string): Promise<Pet[]> {
+    const maxReturnPets = 1000;
+
+    try {
+      const pets = await this.prisma.pet.findMany({
+        where: {
+          categoryId,
+        },
+        orderBy: { username: "asc" },
+        take: maxReturnPets,
+      });
+
+      return pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching pets.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findByBreed(breedId: string): Promise<Pet[]> {
+    const maxReturnPets = 1000;
+
+    try {
+      const pets = await this.prisma.pet.findMany({
+        where: {
+          breedId,
+        },
+        orderBy: { username: "asc" },
+        take: maxReturnPets,
+      });
+
+      return pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching pets.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async findOne(id: string): Promise<Pet> {
     try {
       const pet = await this.prisma.pet.findFirst({

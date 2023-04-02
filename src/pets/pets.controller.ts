@@ -36,6 +36,22 @@ export class PetsController {
   }
 
   /**
+   * Fetches pets of a given category on the platform.
+   */
+  @Get("/category/:id")
+  findByCategory(@Param("id") id: string): Promise<Pet[]> {
+    return this.petsService.findByCategory(id);
+  }
+
+  /**
+   * Fetches pets of a given breed on the platform.
+   */
+  @Get("/breed/:id")
+  findByBreed(@Param("id") id: string): Promise<Pet[]> {
+    return this.petsService.findByBreed(id);
+  }
+
+  /**
    * Fetches a pet with a given id on the platform.
    */
   @Get(":id")
