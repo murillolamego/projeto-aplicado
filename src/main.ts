@@ -43,7 +43,7 @@ const expressSwaggerCustomOptions: ExpressSwaggerCustomOptions = {
     tagsSorter: "alpha",
   },
   customCss: customStyle,
-  customSiteTitle: "Multiledgers API",
+  customSiteTitle: "Projeto Aplicado API",
 };
 
 async function bootstrap(): Promise<void> {
