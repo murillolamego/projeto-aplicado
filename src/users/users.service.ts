@@ -11,19 +11,26 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create({
+    email,
+    name,
+    password,
+    city,
+    state,
+    country,
+  }: CreateUserDto): Promise<User> {
     const userExists = await this.prisma.user.findFirst({
       where: {
-        email: createUserDto.email,
+        email: email,
       },
     });
 
     if (userExists) {
       console.log(
-        `The email, '${createUserDto.email}' is already associated with an account.`,
+        `The email, '${email}' is already associated with an account.`,
       );
       throw new HttpException(
-        `The email, '${createUserDto.email}' is already associated with an account.`,
+        `The email, '${email}' is already associated with an account.`,
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -31,10 +38,7 @@ export class UsersService {
     const saltRounds = 10;
 
     try {
-      createUserDto.password = await bcrypt.hash(
-        createUserDto.password,
-        saltRounds,
-      );
+      password = await bcrypt.hash(password, saltRounds);
     } catch (e) {
       console.log(e.message);
       throw new HttpException(
@@ -45,7 +49,19 @@ export class UsersService {
 
     try {
       const user = await this.prisma.user.create({
-        data: createUserDto,
+        data: {
+          email,
+          name,
+          password,
+          enabled: true,
+          Address: {
+            create: {
+              city,
+              state,
+              country,
+            },
+          },
+        },
       });
 
       delete user.password;
