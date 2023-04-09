@@ -8,6 +8,9 @@ import { BreedsModule } from "./breeds/breeds.module";
 import { CategoriesModule } from "./categories/categories.module";
 import { PetsModule } from "./pets/pets.module";
 import { UsersModule } from "./users/users.module";
+import { CompaniesModule } from './companies/companies.module';
+import { ProductsModule } from './products/products.module';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -20,6 +23,9 @@ import { UsersModule } from "./users/users.module";
     CategoriesModule,
     BreedsModule,
     AuthModule,
+    CompaniesModule,
+    ProductsModule,
+    ServicesModule,
   ],
   controllers: [],
   providers: [PrismaService],
