@@ -7,12 +7,13 @@ import {
   Param,
   Delete,
 } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { Service } from "@prisma/client";
 
 import { CreateServiceDto } from "./dto/create-service.dto";
 import { UpdateServiceDto } from "./dto/update-service.dto";
 import { ServicesService } from "./services.service";
-
+@ApiTags("services")
 @Controller("services")
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
