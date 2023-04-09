@@ -13,7 +13,7 @@ model User {
   name         String
   password     String
   phone        String?
-  photo        String?
+  avatar       String?
   Address      Address  @relation(fields: [addressId], references: [id])
   addressId    String   @unique
   refreshToken String?  @unique
@@ -64,7 +64,7 @@ model Address {
   zipcode String?
   street  String?
   number  String?
-  city    String
+  city    String?
   state   String?
   country String
   User    User?
