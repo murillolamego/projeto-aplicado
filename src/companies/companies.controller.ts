@@ -1,34 +1,62 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CompaniesService } from './companies.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { UpdateCompanyDto } from './dto/update-company.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from "@nestjs/common";
+import { Company } from "@prisma/client";
 
-@Controller('companies')
+import { CompaniesService } from "./companies.service";
+import { CreateCompanyDto } from "./dto/create-company.dto";
+import { UpdateCompanyDto } from "./dto/update-company.dto";
+
+@Controller("companies")
 export class CompaniesController {
   constructor(private readonly companiesService: CompaniesService) {}
 
+  /**
+   * Creates a company on the platform.
+   */
   @Post()
-  create(@Body() createCompanyDto: CreateCompanyDto) {
+  create(@Body() createCompanyDto: CreateCompanyDto): Promise<Company> {
     return this.companiesService.create(createCompanyDto);
   }
 
+  /**
+   * Fetches all companies on the platform.
+   */
   @Get()
-  findAll() {
+  findAll(): Promise<Company[]> {
     return this.companiesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.companiesService.findOne(+id);
+  /**
+   * Fetches a company with a given id on the platform.
+   */
+  @Get(":id")
+  findOne(@Param("id") id: string): Promise<Company> {
+    return this.companiesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companiesService.update(+id, updateCompanyDto);
+  /**
+   * Updates a company with a given id on the platform.
+   */
+  @Patch(":id")
+  update(
+    @Param("id") id: string,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+  ): Promise<Company> {
+    return this.companiesService.update(id, updateCompanyDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companiesService.remove(+id);
+  /**
+   * Deletes a company with a given id on the platform.
+   */
+  @Delete(":id")
+  remove(@Param("id") id: string): Promise<Company> {
+    return this.companiesService.remove(id);
   }
 }

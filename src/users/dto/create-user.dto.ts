@@ -1,7 +1,6 @@
 import {
   IsEmail,
   IsLowercase,
-  IsObject,
   IsOptional,
   IsString,
   IsStrongPassword,
@@ -35,7 +34,7 @@ export class CreateUserDto {
    */
   @IsString()
   @Length(0, 60)
-  city: string;
+  city?: string;
 
   /**
    * @example "NY"
