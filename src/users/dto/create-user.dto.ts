@@ -7,6 +7,8 @@ import {
   Length,
 } from "class-validator";
 
+import { ApiProperty } from "@nestjs/swagger";
+
 export class CreateUserDto {
   /**
    * @example "johndoe@gmail.com"
@@ -50,4 +52,7 @@ export class CreateUserDto {
   @IsString()
   @Length(0, 60)
   country: string;
+
+  // @ApiProperty({ type: "string", format: "binary", required: true })
+  // avatar: BinaryData;
 }

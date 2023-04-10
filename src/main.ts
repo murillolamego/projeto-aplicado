@@ -1,5 +1,10 @@
+import { randomUUID } from "crypto";
+import * as fs from "fs";
+import * as path from "path";
 import { PrismaService } from "prisma.service";
+import * as pump from "pump";
 
+import * as fastifyMultipart from "@fastify/multipart";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
@@ -46,6 +51,12 @@ const expressSwaggerCustomOptions: ExpressSwaggerCustomOptions = {
   customSiteTitle: "Projeto Aplicado API",
 };
 
+async function onFile(part): Promise<void> {
+  const filepath = `src/upload/${randomUUID()}${path.extname(part.filename)}`;
+  this.body.avatar.filepath = filepath;
+  pump(part.file, fs.createWriteStream(filepath));
+}
+
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -62,6 +73,12 @@ async function bootstrap(): Promise<void> {
 
   const configService = app.get(ConfigService);
 
+  //app.register(fastifyMultipart, { attachFieldsToBody: "keyValues" });
+
+  app.register(fastifyMultipart, {
+    attachFieldsToBody: true,
+    onFile,
+  });
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
 

@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { User } from "@prisma/client";
 
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -23,7 +23,8 @@ export class UsersController {
    * Creates a user on the platform.
    */
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  @ApiConsumes("multipart/form-data")
+  create(@Body() createUserDto) {
     return this.usersService.create(createUserDto);
   }
 
