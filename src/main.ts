@@ -52,8 +52,12 @@ const expressSwaggerCustomOptions: ExpressSwaggerCustomOptions = {
 };
 
 async function onFile(part): Promise<void> {
-  const filepath = `src/upload/${randomUUID()}${path.extname(part.filename)}`;
-  this.body.avatar.filepath = filepath;
+  const filepath = `public/${randomUUID()}${path.extname(part.filename)}`;
+
+  console.log(filepath);
+
+  this.body.file.filepath = filepath;
+
   pump(part.file, fs.createWriteStream(filepath));
 }
 
@@ -61,6 +65,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    { rawBody: true },
   );
   app.useGlobalPipes(
     new ValidationPipe({

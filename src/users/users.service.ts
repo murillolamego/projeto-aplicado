@@ -11,63 +11,65 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create({ email }) {
-    console.log(email.value);
-    // const userExists = await this.prisma.user.findFirst({
-    //   where: {
-    //     email: email,
-    //   },
-    // });
+  async create({ email, name, password, file, country, state, city }) {
+    // TODO validate fields and values
 
-    // if (userExists) {
-    //   console.log(
-    //     `The email, '${email}' is already associated with an account.`,
-    //   );
-    //   throw new HttpException(
-    //     `The email, '${email}' is already associated with an account.`,
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // }
+    const userExists = await this.prisma.user.findFirst({
+      where: {
+        email: email.value,
+      },
+    });
 
-    // const saltRounds = 10;
+    if (userExists) {
+      console.log(
+        `The email, '${email.value}' is already associated with an account.`,
+      );
+      throw new HttpException(
+        `The email, '${email.value}' is already associated with an account.`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-    // try {
-    //   password = await bcrypt.hash(password, saltRounds);
-    // } catch (e) {
-    //   console.log(e.message);
-    //   throw new HttpException(
-    //     "Error while creating user.",
-    //     HttpStatus.INTERNAL_SERVER_ERROR,
-    //   );
-    // }
+    const saltRounds = 10;
 
-    // try {
-    //   const user = await this.prisma.user.create({
-    //     data: {
-    //       email,
-    //       name,
-    //       password,
-    //       enabled: true,
-    //       Address: {
-    //         create: {
-    //           city,
-    //           state,
-    //           country,
-    //         },
-    //       },
-    //     },
-    //   });
+    try {
+      password.value = await bcrypt.hash(password.value, saltRounds);
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error while creating user.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
 
-    //   delete user.password;
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          email: email.value,
+          name: name.value,
+          password: password.value,
+          avatar: file?.filepath,
+          enabled: true,
+          Address: {
+            create: {
+              city: city?.value,
+              state: state?.value,
+              country: country.value,
+            },
+          },
+        },
+      });
 
-    //   return user;
-    // } catch (e) {
-    //   console.log(e.message);
-    //   throw new HttpException(
-    //     "Error while creating user.",
-    //     HttpStatus.INTERNAL_SERVER_ERROR,
-    //   );
-    // }
+      delete user.password;
+
+      return user;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error while creating user.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findAll(): Promise<User[]> {

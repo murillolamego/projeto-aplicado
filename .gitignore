@@ -38,4 +38,4 @@ lerna-debug.log*
 .env
 
 # UPLOAD
-src/upload/*
+public/*
