@@ -1,4 +1,5 @@
 import { PrismaService } from "prisma.service";
+import { Breed } from "src/breeds/entities/breed.entity";
 
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Pet } from "@prisma/client";
@@ -158,6 +159,10 @@ export class PetsService {
         where: {
           id,
         },
+        include: {
+          Category: true,
+          Breed: true,
+        },
       });
 
       return pet;
@@ -175,6 +180,10 @@ export class PetsService {
       const pet = await this.prisma.pet.findFirst({
         where: {
           username,
+        },
+        include: {
+          Category: true,
+          Breed: true,
         },
       });
 

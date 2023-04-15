@@ -27,7 +27,8 @@ model Pet {
   id         String   @id @default(uuid())
   username   String   @unique
   name       String
-  age        Int
+  birthdate  DateTime
+  avatar     String?
   Category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
   Breed      Breed    @relation(fields: [breedId], references: [id])

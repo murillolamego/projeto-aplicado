@@ -1,8 +1,9 @@
 import * as bcrypt from "bcrypt";
 import { PrismaService } from "prisma.service";
+import { Breed } from "src/breeds/entities/breed.entity";
 
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { User } from "@prisma/client";
+import { Pet, User } from "@prisma/client";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -81,6 +82,10 @@ export class UsersService {
         take: maxReturnUsers,
       });
 
+      users.forEach((user) => {
+        delete user.password;
+      });
+
       return users;
     } catch (e) {
       console.log(e.message);
@@ -98,6 +103,8 @@ export class UsersService {
           id,
         },
       });
+
+      delete user.password;
 
       return user;
     } catch (e) {
@@ -154,6 +161,33 @@ export class UsersService {
       console.log(e.message);
       throw new HttpException(
         "Error deleting user.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findPets(id: string): Promise<Pet[]> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          id,
+        },
+        include: {
+          pets: {
+            orderBy: { categoryId: "asc" },
+            include: {
+              Category: true,
+              Breed: true,
+            },
+          },
+        },
+      });
+
+      return user.pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching user pets.",
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

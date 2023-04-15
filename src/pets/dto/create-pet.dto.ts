@@ -1,7 +1,7 @@
 import {
   IsAlphanumeric,
+  IsDateString,
   IsLowercase,
-  IsPositive,
   IsString,
   IsUUID,
   Length,
@@ -24,10 +24,12 @@ export class CreatePetDto {
   name: string;
 
   /**
-   * @example "5"
+   * @example "01/01/2021"
    */
-  @IsPositive()
-  age: number;
+  @IsDateString()
+  birthdate: string;
+
+  avatar?: string;
 
   /**
    * @example "UUID"
