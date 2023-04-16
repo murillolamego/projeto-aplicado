@@ -36,6 +36,14 @@ export class BreedsController {
   }
 
   /**
+   * Fetches all breeds on the platform.
+   */
+  @Get("/category/:id")
+  findAllByCategory(@Param("id") id): Promise<Breed[]> {
+    return this.breedsService.findAllByCategory(id);
+  }
+
+  /**
    * Fetches a breed with a given id on the platform.
    */
   @Get(":id")

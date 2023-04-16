@@ -78,6 +78,28 @@ export class BreedsService {
     }
   }
 
+  async findAllByCategory(categoryId: string): Promise<Breed[]> {
+    const maxReturnBreeds = 1000;
+
+    try {
+      const categories = await this.prisma.breed.findMany({
+        where: {
+          categoryId,
+        },
+        orderBy: { name: "asc" },
+        take: maxReturnBreeds,
+      });
+
+      return categories;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching categories.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async findOne(id: string): Promise<Breed> {
     try {
       const breed = await this.prisma.breed.findFirst({
