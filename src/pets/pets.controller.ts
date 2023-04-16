@@ -36,6 +36,14 @@ export class PetsController {
   }
 
   /**
+   * Fetches all pets on the platform with their relations.
+   */
+  @Get("/relations")
+  findAllWithRelations(): Promise<Pet[]> {
+    return this.petsService.findAllWithRelations();
+  }
+
+  /**
    * Fetches pets of a given category on the platform.
    */
   @Get("/category/:id")

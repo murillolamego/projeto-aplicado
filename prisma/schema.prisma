@@ -31,6 +31,9 @@ model Pet {
   name          String
   birthdate     DateTime
   avatar        String?
+  size          DogSize       @default(MEDIUM)
+  height        Float?
+  weight        Float?
   Category      Category      @relation(fields: [categoryId], references: [id])
   categoryId    String
   Breed         Breed         @relation(fields: [breedId], references: [id])
@@ -147,4 +150,10 @@ model PetFollows {
   followingId String
 
   @@id([followerId, followingId])
+}
+
+enum DogSize {
+  SMALL
+  MEDIUM
+  BIG
 }

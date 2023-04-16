@@ -1,0 +1,7 @@
+-- CreateEnum
+CREATE TYPE "DogSize" AS ENUM ('SMALL', 'MEDIUM', 'BIG');
+
+-- AlterTable
+ALTER TABLE "Pet" ADD COLUMN     "height" DOUBLE PRECISION,
+ADD COLUMN     "size" "DogSize" NOT NULL DEFAULT 'MEDIUM',
+ADD COLUMN     "weight" DOUBLE PRECISION;
