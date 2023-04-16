@@ -1,36 +1,43 @@
 import { PrismaService } from "prisma.service";
-import { Breed } from "src/breeds/entities/breed.entity";
 
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Pet } from "@prisma/client";
 
-import { CreatePetDto } from "./dto/create-pet.dto";
 import { UpdatePetDto } from "./dto/update-pet.dto";
 
 @Injectable()
 export class PetsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createPetDto: CreatePetDto): Promise<Pet> {
+  async create({
+    username,
+    name,
+    birthdate,
+    file,
+    categoryId,
+    breedId,
+    guardianId,
+  }): Promise<Pet> {
+    // TODO validate fields and values
     const petExists = await this.prisma.pet.findFirst({
       where: {
-        username: createPetDto.username,
+        username: username.value,
       },
     });
 
     if (petExists) {
       console.log(
-        `The username \'${createPetDto.username}\' is already associated with an account.`,
+        `The username \'${username.value}\' is already associated with an account.`,
       );
       throw new HttpException(
-        `The username \'${createPetDto.username}\' is already associated with an account.`,
+        `The username \'${username.value}\' is already associated with an account.`,
         HttpStatus.BAD_REQUEST,
       );
     }
 
     const categoryExists = await this.prisma.category.findFirst({
       where: {
-        id: createPetDto.categoryId,
+        id: categoryId.value,
       },
       include: {
         breeds: true,
@@ -46,12 +53,8 @@ export class PetsService {
     }
 
     const breedExists = categoryExists.breeds.find((breed) => {
-      return breed.id === createPetDto.breedId;
+      return breed.id === breedId.value;
     });
-
-    console.log("BREEDS", categoryExists.breeds);
-
-    console.log("BREED EXISTS", breedExists);
 
     if (!breedExists) {
       console.log(`This breed of ${categoryExists.name} is not available.`);
@@ -63,7 +66,7 @@ export class PetsService {
 
     const guardianExists = await this.prisma.user.findFirst({
       where: {
-        id: createPetDto.guardianId,
+        id: guardianId.value,
       },
     });
 
@@ -75,9 +78,19 @@ export class PetsService {
       );
     }
 
+    const birthdateDatetime = new Date(birthdate.value);
+
     try {
       const pet = await this.prisma.pet.create({
-        data: createPetDto,
+        data: {
+          username: username.value,
+          name: name.value,
+          birthdate: birthdateDatetime,
+          avatar: file?.filepath,
+          categoryId: categoryId.value,
+          breedId: breedId.value,
+          guardianId: guardianId.value,
+        },
       });
 
       return pet;

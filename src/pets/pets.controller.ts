@@ -23,7 +23,7 @@ export class PetsController {
    * Creates a pet on the platform.
    */
   @Post()
-  create(@Body() createpetDto: CreatePetDto): Promise<Pet> {
+  create(@Body() createpetDto): Promise<Pet> {
     return this.petsService.create(createpetDto);
   }
 

@@ -12,7 +12,7 @@
         }
       }
     ],
-    "assets": ["assets/**/*", "infra/mail/templates/**/*"],
+    "assets": ["**/*.png"],
     "watchAssets": true
   }
 }
