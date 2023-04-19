@@ -70,4 +70,12 @@ export class UsersController {
   findPets(@Param("id") id: string): Promise<Pet[]> {
     return this.usersService.findPets(id);
   }
+
+  /**
+   * Fetches all pets followed by user on the platform.
+   */
+  @Get(":id/follows")
+  findFollows(@Param("id") id: string): Promise<Pet[]> {
+    return this.usersService.findFollowing(id);
+  }
 }

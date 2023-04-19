@@ -8,7 +8,7 @@ import {
   Delete,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { Pet } from "@prisma/client";
+import { Pet, User } from "@prisma/client";
 
 import { CreatePetDto } from "./dto/create-pet.dto";
 import { UpdatePetDto } from "./dto/update-pet.dto";
@@ -92,5 +92,29 @@ export class PetsController {
   @Delete(":id")
   remove(@Param("id") id: string): Promise<Pet> {
     return this.petsService.remove(id);
+  }
+
+  /**
+   * Fetches all pets following this user on the platform.
+   */
+  @Get(":id/followers")
+  findFollowers(@Param("id") id: string): Promise<Pet[]> {
+    return this.petsService.findFollowers(id);
+  }
+
+  /**
+   * Fetches all pets followed by this pet on the platform.
+   */
+  @Get(":id/follows")
+  findFollowing(@Param("id") id: string): Promise<Pet[]> {
+    return this.petsService.findFollowing(id);
+  }
+
+  /**
+   * Fetches all users following this pet on the platform.
+   */
+  @Get(":id/followers/users")
+  findUserFollowers(@Param("id") id: string): Promise<User[]> {
+    return this.petsService.findUserFollowers(id);
   }
 }

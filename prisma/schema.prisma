@@ -73,15 +73,17 @@ model Breed {
 }
 
 model Address {
-  id      String   @id @default(uuid())
-  zipcode String?
-  street  String?
-  number  String?
-  city    String?
-  state   String?
-  country String
-  User    User?
-  Company Company?
+  id        String   @id @default(uuid())
+  zipcode   String?
+  street    String?
+  number    String?
+  city      String?
+  state     String?
+  country   String
+  User      User?
+  Company   Company?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Company {
@@ -115,39 +117,47 @@ model Product {
 }
 
 model Post {
-  id       String    @id @default(uuid())
-  image    String
-  text     String
-  Pet      Pet?      @relation(fields: [petId], references: [id])
-  petId    String?
-  comments Comment[]
+  id        String    @id @default(uuid())
+  image     String?
+  text      String
+  Pet       Pet?      @relation(fields: [petId], references: [id])
+  petId     String?
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Comment {
-  id     String  @id @default(uuid())
-  text   String
-  Post   Post?   @relation(fields: [postId], references: [id])
-  postId String?
-  Pet    Pet?    @relation(fields: [petId], references: [id])
-  petId  String?
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  id        String   @id @default(uuid())
+  text      String
+  Post      Post?    @relation(fields: [postId], references: [id])
+  postId    String?
+  Pet       Pet?     @relation(fields: [petId], references: [id])
+  petId     String?
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserFollows {
-  follower    User   @relation("userFollower", fields: [followerId], references: [id])
+  follower    User     @relation("userFollower", fields: [followerId], references: [id])
   followerId  String
-  following   Pet    @relation("userFollowing", fields: [followingId], references: [id])
+  following   Pet      @relation("userFollowing", fields: [followingId], references: [id])
   followingId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@id([followerId, followingId])
 }
 
 model PetFollows {
-  follower    Pet    @relation("petFollower", fields: [followerId], references: [id])
+  follower    Pet      @relation("petFollower", fields: [followerId], references: [id])
   followerId  String
-  following   Pet    @relation("petFollowing", fields: [followingId], references: [id])
+  following   Pet      @relation("petFollowing", fields: [followingId], references: [id])
   followingId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@id([followerId, followingId])
 }

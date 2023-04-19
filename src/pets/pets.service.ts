@@ -1,7 +1,7 @@
 import { PrismaService } from "prisma.service";
 
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { Pet } from "@prisma/client";
+import { Pet, User } from "@prisma/client";
 
 import { UpdatePetDto } from "./dto/update-pet.dto";
 
@@ -266,6 +266,72 @@ export class PetsService {
       console.log(e.message);
       throw new HttpException(
         "Error deleting pet.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findFollowers(id: string): Promise<Pet[]> {
+    try {
+      const pets = await this.prisma.pet.findMany({
+        where: {
+          petFollowers: {
+            some: {
+              followingId: id,
+            },
+          },
+        },
+      });
+
+      return pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching pet followers.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findFollowing(id: string): Promise<Pet[]> {
+    try {
+      const pets = await this.prisma.pet.findMany({
+        where: {
+          petFollowers: {
+            some: {
+              followerId: id,
+            },
+          },
+        },
+      });
+
+      return pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching followed pets.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findUserFollowers(id: string): Promise<User[]> {
+    try {
+      const users = await this.prisma.user.findMany({
+        where: {
+          petFollowing: {
+            some: {
+              followingId: id,
+            },
+          },
+        },
+      });
+
+      return users;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching user followers.",
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

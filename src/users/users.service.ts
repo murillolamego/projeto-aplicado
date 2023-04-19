@@ -192,4 +192,26 @@ export class UsersService {
       );
     }
   }
+
+  async findFollowing(id: string): Promise<Pet[]> {
+    try {
+      const pets = await this.prisma.pet.findMany({
+        where: {
+          userFollowers: {
+            some: {
+              followerId: id,
+            },
+          },
+        },
+      });
+
+      return pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching followed pets.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
