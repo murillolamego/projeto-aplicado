@@ -214,4 +214,23 @@ export class UsersService {
       );
     }
   }
+
+  async followPet(followerId: string, followingId: string): Promise<boolean> {
+    try {
+      await this.prisma.userFollows.create({
+        data: {
+          followerId,
+          followingId,
+        },
+      });
+
+      return true;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching followed pets.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

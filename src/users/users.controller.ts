@@ -78,4 +78,15 @@ export class UsersController {
   findFollows(@Param("id") id: string): Promise<Pet[]> {
     return this.usersService.findFollowing(id);
   }
+
+  /**
+   * Follows a pet on the platform.
+   */
+  @Post(":followerid/follow/:followingid")
+  followPet(
+    @Param("followerid") followerId: string,
+    @Param("followingid") followingId: string,
+  ): Promise<boolean> {
+    return this.usersService.followPet(followerId, followingId);
+  }
 }
