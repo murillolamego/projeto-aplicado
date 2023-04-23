@@ -146,6 +146,60 @@ export class PetsService {
     }
   }
 
+  async findAllAdoptionWithRelations(): Promise<Pet[]> {
+    const maxReturnPets = 1000;
+
+    try {
+      const pets = await this.prisma.pet.findMany({
+        where: {
+          adoption: true,
+        },
+        orderBy: { username: "asc" },
+        take: maxReturnPets,
+        include: {
+          Category: true,
+          Breed: true,
+          Guardian: true,
+        },
+      });
+
+      return pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching pets.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findAllProcreationWithRelations(): Promise<Pet[]> {
+    const maxReturnPets = 1000;
+
+    try {
+      const pets = await this.prisma.pet.findMany({
+        where: {
+          procreation: true,
+        },
+        orderBy: { username: "asc" },
+        take: maxReturnPets,
+        include: {
+          Category: true,
+          Breed: true,
+          Guardian: true,
+        },
+      });
+
+      return pets;
+    } catch (e) {
+      console.log(e.message);
+      throw new HttpException(
+        "Error fetching pets.",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async findByCategory(categoryId: string): Promise<Pet[]> {
     const maxReturnPets = 1000;
 
