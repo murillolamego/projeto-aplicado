@@ -41,7 +41,7 @@ model Pet {
   Guardian      User          @relation("guardian", fields: [guardianId], references: [id])
   guardianId    String
   adoption      Boolean       @default(false)
-  procriation   Boolean       @default(false)
+  procreation   Boolean       @default(false)
   posts         Post[]
   comments      Comment[]
   userFollowers UserFollows[] @relation("userFollowing")
